@@ -2,7 +2,7 @@
 
 namespace RickAndMorty\Controllers;
 
-use RickAndMorty\Models\CharactersCollectionsGetter;
+use RickAndMorty\CharactersCollectionsGetter;
 use RickAndMorty\View;
 
 class CharactersController
@@ -19,12 +19,6 @@ class CharactersController
     {
         $allCharacters = $this->client->getAllCharacters();
         return new View('basic', ['characters' => $allCharacters]);
-    }
-
-    public function oneCharacter($numberOfCharacter) : View
-    {
-        $singleCharacter = $this->client->getSingleCharacter($numberOfCharacter);
-        return new View('single', ['character' => $singleCharacter]);
     }
 
 }
