@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Rick and Morty characters information</title>
+</head>
+<body>
+<h2>Characters:</h2>
+{% if characters is defined %}
+{% for character in characters %}
+    <div>
+        <h3>{{ character.getImage() }}</h3>
+        <img src="{{ character.getName() }}" alt="{{ character.getStatus() }}">
+    </div>
+{% endfor %}
+</body>
+</html>
