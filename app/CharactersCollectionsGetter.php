@@ -24,20 +24,20 @@ class CharactersCollectionsGetter
         return $this->createCollection(json_decode($response->getBody()->getContents()));
 
     }
-    private function createCollection (array $charactersCollection): array
+    private function createCollection (object $charactersCollection): array
     {
         $collection = [];
-        foreach ($charactersCollection as $character)
-        {
-        $collection[] = new Character
-        (
-            $character->image,
-            $character->name,
-            $character->status,
-            $character->species,
-            $character->location->name,
-            json_decode($this->client->get($character->episode[0])->getBody()->getContents())->name
-        );
+        foreach ($charactersCollection->results as $character) {
+            $characterArray = get_object_vars($character);
+            $episode = json_decode($this->client->get($character->episode[0])->getBody()->getContents());
+            $collection[] = new Character(
+                $characterArray['image'],
+                $characterArray['name'],
+                $characterArray['status'],
+                $characterArray['species'],
+                $characterArray['location']->name,
+                $episode->name
+            );
         }
         return $collection;
     }
