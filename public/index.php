@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
 
-require_once 'vendor\autoload.php';
+require_once __DIR__ . '/../vendor/autoload.php';
 
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 
-$loader = new FilesystemLoader(__DIR__.'/app/Views');
+$loader = new FilesystemLoader(__DIR__.'/../app/Views');
 $twig = new Environment($loader);
 
 $dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r) {
