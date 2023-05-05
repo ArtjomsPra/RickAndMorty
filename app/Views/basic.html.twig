@@ -17,9 +17,15 @@
                     </div>
                     <div class="card-content">
                         <p class="title">{{ character.getName() }}</p>
-                        <p class="subtitle">{{ character.getStatus() }} - {{ character.getSpecies() }}</p>
+                        {% if character.getStatus() == 'Alive' %}
+                            <p class="subtitle"><span class="tag is-success"></span> {{ character.getStatus() }} - {{ character.getSpecies() }}</p>
+                        {% elseif character.getStatus() == 'Dead' %}
+                            <p class="subtitle"><span class="tag is-danger"></span> {{ character.getStatus() }} - {{ character.getSpecies() }}</p>
+                        {% else %}
+                            <p class="subtitle"><span class="tag is-warning"></span> {{ character.getStatus() }} - {{ character.getSpecies() }}</p>
+                        {% endif %}
                         <p>{{ character.getLocation() }}</p>
-                        <p>First seen in {{ character.getEpisode() }}</p>
+                        <p>First seen in  {{ character.getEpisode() }}</p>
                     </div>
                 </div>
             </div>
