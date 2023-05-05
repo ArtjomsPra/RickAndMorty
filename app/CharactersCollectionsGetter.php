@@ -3,7 +3,7 @@
 namespace RickAndMorty;
 
 use GuzzleHttp\Client;
-use RickAndMorty\Models\Character;
+use RickAndMorty\Model\Character;
 
 class CharactersCollectionsGetter
 {
@@ -29,10 +29,6 @@ class CharactersCollectionsGetter
         $collection = [];
         foreach ($charactersCollection as $character)
         {
-            $firstEpisodeUrl = $character->episode[0];
-            $episodeResponse = $this->client->get($firstEpisodeUrl);
-            $episode = json_decode($episodeResponse->getBody()->getContents());
-
         $collection[] = new Character
         (
             $character->image,
@@ -40,7 +36,7 @@ class CharactersCollectionsGetter
             $character->status,
             $character->species,
             $character->location->name,
-            $episode->name
+            json_decode($this->client->get($character->episode[0])->getBody()->getContents())->name
         );
         }
         return $collection;
