@@ -9,7 +9,8 @@ $loader = new FilesystemLoader(__DIR__.'/../app/Views');
 $twig = new Environment($loader);
 
 $dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r) {
-    $r->addRoute('GET', '/basic', [RickAndMorty\Controllers\CharactersController::class, 'allCharacters']);
+    $r->addRoute('GET', '/', [RickAndMorty\Controllers\CharactersController::class, 'allCharacters']);
+    $r->addRoute('GET', '/characters', [RickAndMorty\Controllers\CharactersController::class, 'getCharactersByPage']);
 });
 
 $httpMethod = $_SERVER['REQUEST_METHOD'];
