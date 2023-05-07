@@ -21,4 +21,17 @@ class CharactersController
         return new View('basic', ['characters' => $allCharacters]);
     }
 
+    public function getCharactersByPage() : View
+    {
+        $pageNumber = isset($_GET['page']) ? (int) $_GET['page'] : 1;
+        $allCharacters = $this->client->getCharactersByPage($pageNumber);
+        $currentPage = $pageNumber;
+        $hasNextPage = !empty($allCharacters);
+        return new View('modified', [
+            'characters' => $allCharacters,
+            'currentPage' => $currentPage,
+            'hasNextPage' => $hasNextPage
+        ]);
+    }
+
 }
