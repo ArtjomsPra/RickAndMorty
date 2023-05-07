@@ -5,11 +5,13 @@ require_once __DIR__ . '/../vendor/autoload.php';
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 
-$loader = new FilesystemLoader(__DIR__.'/../app/Views');
+$loader = new FilesystemLoader(__DIR__ . '/../app/Views');
 $twig = new Environment($loader);
 
-$dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r) {
-    $r->addRoute('GET', '/characters', [RickAndMorty\Controllers\CharactersController::class, 'getCharactersByPage']);
+$dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) {
+    $r->addRoute
+    ('GET', '/characters',
+        [RickAndMorty\Controllers\CharactersController::class, 'getCharactersByPage']);
 });
 
 $httpMethod = $_SERVER['REQUEST_METHOD'];
