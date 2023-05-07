@@ -29,6 +29,11 @@
                     </div>
                 </div>
             </div>
+            {% if loop.index % 20 == 0 %}
+                {% set currentPage = loop.index / 20 %}
+                <a href="/characters?page={{ currentPage - 1 }}" class="button">Previous</a>
+                <a href="/characters?page={{ currentPage + 1 }}" class="button">Next</a>
+            {% endif %}
         {% endfor %}
     </div>
 </div>
