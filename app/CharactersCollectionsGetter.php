@@ -5,6 +5,8 @@ namespace RickAndMorty;
 use GuzzleHttp\Client;
 use RickAndMorty\Model\Character;
 
+ini_set('max_execution_time', '120');
+
 class CharactersCollectionsGetter
 {
 
@@ -18,10 +20,26 @@ class CharactersCollectionsGetter
 
     public function getAllCharacters () : array
     {
-
+        $collection = [];
         $url = 'https://rickandmortyapi.com/api/character';
+        do {
+            $response = $this->client->get($url);
+            $charactersCollection = json_decode($response->getBody()->getContents());
+
+            $collection = array_merge($collection, $this->createCollection($charactersCollection));
+
+            $url = $charactersCollection->info->next;
+        } while (!empty($url));
+
+        return $collection;
+
+    }
+    public function getCharactersByPage(int $pageNumber): array
+    {
+        $url = "https://rickandmortyapi.com/api/character?page=$pageNumber";
         $response = $this->client->get($url);
-        return $this->createCollection(json_decode($response->getBody()->getContents()));
+        $charactersCollection = json_decode($response->getBody()->getContents());
+        return $this->createCollection($charactersCollection);
 
     }
     private function createCollection (object $charactersCollection): array
