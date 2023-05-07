@@ -17,6 +17,7 @@ class CharactersCollectionsGetter
     {
         $this->client = new Client(['verify' => false]);
     }
+
     public function getCharactersByPage(int $pageNumber): array
     {
         $url = "https://rickandmortyapi.com/api/character?page=$pageNumber";
@@ -25,7 +26,8 @@ class CharactersCollectionsGetter
         return $this->createCollection($charactersCollection);
 
     }
-    private function createCollection (object $charactersCollection): array
+
+    private function createCollection(object $charactersCollection): array
     {
         $collection = [];
         foreach ($charactersCollection->results as $character) {
