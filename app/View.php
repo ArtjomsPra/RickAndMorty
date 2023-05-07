@@ -6,7 +6,8 @@ class View
 {
     private string $template;
     private array $collection;
-    public function __construct (string $template, array $collection)
+
+    public function __construct(string $template, array $collection)
     {
         $this->template = $template;
         $this->collection = $collection;
