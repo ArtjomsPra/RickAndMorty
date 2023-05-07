@@ -14,13 +14,6 @@ class CharactersController
     {
         $this->client = new CharactersCollectionsGetter();
     }
-
-    public function allCharacters() : View
-    {
-        $allCharacters = $this->client->getAllCharacters();
-        return new View('basic', ['characters' => $allCharacters]);
-    }
-
     public function getCharactersByPage() : View
     {
         $pageNumber = isset($_GET['page']) ? (int) $_GET['page'] : 1;
