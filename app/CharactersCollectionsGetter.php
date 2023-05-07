@@ -17,23 +17,6 @@ class CharactersCollectionsGetter
     {
         $this->client = new Client(['verify' => false]);
     }
-
-    public function getAllCharacters () : array
-    {
-        $collection = [];
-        $url = 'https://rickandmortyapi.com/api/character';
-        do {
-            $response = $this->client->get($url);
-            $charactersCollection = json_decode($response->getBody()->getContents());
-
-            $collection = array_merge($collection, $this->createCollection($charactersCollection));
-
-            $url = $charactersCollection->info->next;
-        } while (!empty($url));
-
-        return $collection;
-
-    }
     public function getCharactersByPage(int $pageNumber): array
     {
         $url = "https://rickandmortyapi.com/api/character?page=$pageNumber";
