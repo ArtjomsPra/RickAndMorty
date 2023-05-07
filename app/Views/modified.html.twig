@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Rick and Morty Characters</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css">
+</head>
+<body>
+<div class="container">
+    <div class="columns is-multiline">
+        {% for character in characters %}
+            <div class="column is-one-quarter">
+                <div class="card">
+                    <div class="card-image">
+                        <figure class="image is-4by3">
+                            <img src="{{ character.getImage() }}" alt="{{ character.getName() }}">
+                        </figure>
+                    </div>
+                    <div class="card-content">
+                        <p class="title">{{ character.getName() }}</p>
+                        {% if character.getStatus() == 'Alive' %}
+                            <p class="subtitle"><span class="tag is-success"></span> {{ character.getStatus() }} - {{ character.getSpecies() }}</p>
+                        {% elseif character.getStatus() == 'Dead' %}
+                            <p class="subtitle"><span class="tag is-danger"></span> {{ character.getStatus() }} - {{ character.getSpecies() }}</p>
+                        {% else %}
+                            <p class="subtitle"><span class="tag is-warning"></span> {{ character.getStatus() }} - {{ character.getSpecies() }}</p>
+                        {% endif %}
+                        <p>{{ character.getLocation() }}</p>
+                        <p>First seen in {{ character.getEpisode() }}</p>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    {% if currentPage > 1 %}
+        <a href="/characters?page=1" class="button">First</a>
+        <a href="/characters?page={{ currentPage - 1 }}" class="button">Previous</a>
+    {% endif %}
+    {% if hasNextPage %}
+        <a href="/characters?page={{ currentPage + 1 }}" class="button">Next</a>
+    {% endif %}
+</div>
+</body>
+</html>
