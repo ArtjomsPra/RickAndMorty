@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Rick and Morty Episodes</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css">
+</head>
+<body>
+<div class="container">
+    <div class="columns is-multiline">
+        {% for episode in episodes %}
+            <div class="column is-one-quarter">
+                <div class="card">
+                    <div class="card-image">
+                        <figure class="image is-4by3">
+                            <img src="https://i.imgur.com/grfEnUl.jpeg" alt="{{ episode.getName() }}">
+                        </figure>
+                    </div>
+                    <div class="card-content">
+                        <p class="title">{{ episode.getName() }}</p>
+                        <p class="subtitle">{{ episode.getAirDate() }}</p>
+                        <p><strong>Characters:</strong></p>
+                        <ul>
+                            {% for character in episode.getCharacters() %}
+                                <li>{{ character }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    {% if currentPage > 1 %}
+        <a href="/episodes?page=1" class="button">First</a>
+        <a href="/episodes?page={{ currentPage - 1 }}" class="button">Previous</a>
+    {% endif %}
+    {% if hasNextPage %}
+        <a href="/episodes?page={{ currentPage + 1 }}" class="button">Next</a>
+    {% endif %}
+</div>
+</body>
+</html>
