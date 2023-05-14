@@ -11,7 +11,16 @@ $twig = new Environment($loader);
 $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) {
     $r->addRoute
     ('GET', '/characters',
-        [RickAndMorty\Controllers\CharactersController::class, 'getCharactersByPage']);
+        [RickAndMorty\Controllers\Controllers::class, 'getCharactersByPage']);
+    $r->addRoute
+    ('GET', '/episodes',
+        [RickAndMorty\Controllers\Controllers::class, 'getEpisodesByPage']);
+    $r->addRoute
+    ('GET', '/locations',
+        [RickAndMorty\Controllers\Controllers::class, 'getLocationsByPage']);
+    $r->addRoute
+    ('GET', "/character",
+        [RickAndMorty\Controllers\Controllers::class, 'searchCharacter']);
 });
 
 $httpMethod = $_SERVER['REQUEST_METHOD'];
