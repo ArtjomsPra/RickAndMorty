@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Rick and Morty Locations</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css">
+</head>
+<body>
+<div class="container">
+    <div class="columns is-multiline">
+        {% for location in locations %}
+            <div class="column is-one-quarter">
+                <div class="card">
+                    <div class="card-image">
+                        <figure class="image is-4by3">
+                            <img src="https://rickandmortyapi.com/api/character/avatar/1.jpeg" alt="Rick and Morty">
+                        </figure>
+                    </div>
+                    <div class="card-content">
+                        <p class="title">{{ location.getName() }}</p>
+                        <p class="subtitle">{{ location.getType() }}</p>
+                        <p>{{ location.getDimension() }}</p>
+                        <p>Residents:</p>
+                        <ul>
+                            {% for resident in location.getResidents() %}
+                                <li>{{ resident }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    {% if currentPage > 1 %}
+        <a href="/locations?page=1" class="button">First</a>
+        <a href="/locations?page={{ currentPage - 1 }}" class="button">Previous</a>
+    {% endif %}
+    {% if hasNextPage %}
+        <a href="/locations?page={{ currentPage + 1 }}" class="button">Next</a>
+    {% endif %}
+</div>
+</body>
+</html>
