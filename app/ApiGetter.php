@@ -47,18 +47,22 @@ class ApiGetter
         return $collection;
     }
 
-    public function getEpisodesByPage(int $pageNumber): array
+    public function getEpisodesByPage(int $pageNumber, int $pageSize = 20): array
     {
         $url = "https://rickandmortyapi.com/api/episode?page=$pageNumber";
         $response = $this->client->get($url);
         $episodesCollection = json_decode($response->getBody()->getContents());
-        return $this->createEpisodeCollection($episodesCollection);
+        return $this->createEpisodeCollection($episodesCollection, $pageSize);
     }
 
-    private function createEpisodeCollection(object $episodesCollection): array
+    private function createEpisodeCollection(object $episodesCollection, int $pageSize): array
     {
         $collection = [];
+        $episodeIndex = 0;
         foreach ($episodesCollection->results as $episode) {
+            if ($episodeIndex >= $pageSize) {
+                break;
+            }
             $characters = [];
             foreach ($episode->characters as $characterUrl) {
                 $characterData = json_decode($this->client->get($characterUrl)->getBody()->getContents());
@@ -70,6 +74,7 @@ class ApiGetter
                 $episode->air_date,
                 $characters
             );
+            $episodeIndex++;
         }
         return $collection;
     }
