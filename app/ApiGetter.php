@@ -20,38 +20,69 @@ class ApiGetter
         $this->client = new Client(['verify' => false]);
     }
 
+    public function ensureCacheDirectoryExists(): void
+    {
+        if (!file_exists('cache')) {
+            mkdir('cache', 0777, true);
+        }
+    }
+
     public function getCharactersByPage(int $pageNumber): array
     {
-        $url = "https://rickandmortyapi.com/api/character?page=$pageNumber";
-        $response = $this->client->get($url);
-        $charactersCollection = json_decode($response->getBody()->getContents());
-        return $this->createCollection($charactersCollection);
+        $this->ensureCacheDirectoryExists();
+        $cacheFile = "cache/page_$pageNumber.json";
+        $currentTime = time();
+        if (file_exists($cacheFile) && ($currentTime - filemtime($cacheFile)) < 300) {
+            $charactersCollection = json_decode(file_get_contents($cacheFile));
+        } else {
+            $url = "https://rickandmortyapi.com/api/character?page=$pageNumber";
+            $response = $this->client->get($url);
+            $charactersCollection = json_decode($response->getBody()->getContents());
+            file_put_contents($cacheFile, json_encode($charactersCollection));
+        }
 
+        return $this->createCollection($charactersCollection);
     }
 
     private function createCollection(object $charactersCollection): array
     {
         $collection = [];
+        $locations = [];
         foreach ($charactersCollection->results as $character) {
             $characterArray = get_object_vars($character);
             $episode = json_decode($this->client->get($character->episode[0])->getBody()->getContents());
+            $location = $characterArray['location']->name;
+            if (!in_array($location, $locations)) {
+                $locations[] = $location;
+            }
             $collection[] = new Character(
                 $characterArray['image'],
                 $characterArray['name'],
                 $characterArray['status'],
                 $characterArray['species'],
-                $characterArray['location']->name,
+                $location,
                 $episode->name
             );
         }
-        return $collection;
+        return [
+            'collection' => $collection,
+            'locations' => $locations
+        ];
     }
 
     public function getEpisodesByPage(int $pageNumber, int $pageSize = 20): array
     {
-        $url = "https://rickandmortyapi.com/api/episode?page=$pageNumber";
-        $response = $this->client->get($url);
-        $episodesCollection = json_decode($response->getBody()->getContents());
+        $this->ensureCacheDirectoryExists();
+        $cacheFile = "cache/episodes_$pageNumber.json";
+        $currentTime = time();
+        if (file_exists($cacheFile) && ($currentTime - filemtime($cacheFile)) < 300) {
+            $episodesCollection = json_decode(file_get_contents($cacheFile));
+        }   else {
+            $url = "https://rickandmortyapi.com/api/episode?page=$pageNumber";
+            $response = $this->client->get($url);
+            $episodesCollection = json_decode($response->getBody()->getContents());
+            file_put_contents($cacheFile, json_encode($episodesCollection));
+        }
         return $this->createEpisodeCollection($episodesCollection, $pageSize);
     }
 
@@ -81,9 +112,17 @@ class ApiGetter
 
     public function getLocationsByPage(int $pageNumber): array
     {
-        $url = "https://rickandmortyapi.com/api/location?page=$pageNumber";
-        $response = $this->client->get($url);
-        $locationsCollection = json_decode($response->getBody()->getContents());
+        $this->ensureCacheDirectoryExists();
+        $cacheFile = "cache/location_$pageNumber.json";
+        $currentTime = time();
+        if (file_exists($cacheFile) && ($currentTime - filemtime($cacheFile)) < 300) {
+            $locationsCollection = json_decode(file_get_contents($cacheFile));
+        } else {
+            $url = "https://rickandmortyapi.com/api/location?page=$pageNumber";
+            $response = $this->client->get($url);
+            $locationsCollection = json_decode($response->getBody()->getContents());
+            file_put_contents($cacheFile, json_encode($locationsCollection));
+        }
         return $this->createLocationCollection($locationsCollection);
     }
 
