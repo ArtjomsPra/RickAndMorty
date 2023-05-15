@@ -18,13 +18,16 @@ class Controllers
     public function getCharactersByPage(): View
     {
         $pageNumber = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-        $allCharacters = $this->client->getCharactersByPage($pageNumber);
+        $result = $this->client->getCharactersByPage($pageNumber);
+        $allCharacters = $result['collection'];
         $currentPage = $pageNumber;
         $hasNextPage = !empty($allCharacters);
+        $locations = $result['locations'];
         return new View('characters', [
             'characters' => $allCharacters,
             'currentPage' => $currentPage,
-            'hasNextPage' => $hasNextPage
+            'hasNextPage' => $hasNextPage,
+            'locations' => $locations
         ]);
     }
 
